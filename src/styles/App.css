@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;700;900&display=swap');
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #050505;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* 1. Deep Black Void Background */
+.sky {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: #050505;
+  overflow: hidden;
+  perspective: 1000px;
+  animation: skyZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes skyZoom {
+  0% {
+    transform: scale(1.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 2. Twinkling Stars */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  /* 처음에는 보이지 않음 */
+  animation:
+    appear 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    twinkle ease-in-out infinite;
+  animation-delay:
+    var(--appear-delay),
+    calc(var(--appear-delay) + 3.5s + var(--twinkle-delay));
+  animation-duration:
+    3.5s,
+    var(--twinkle-duration);
+}
+
+/* Small stars */
+.star-small {
+  width: 1px;
+  height: 1px;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Medium stars */
+.star-medium {
+  width: 2px;
+  height: 2px;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+/* Large stars */
+.star-large {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+/* 3. Appear Animation (우주 워프 효과 + 천천히 빛남) */
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: translate(var(--start-x), var(--start-y)) scale(0.1);
+  }
+
+  40% {
+    opacity: 0.2;
+    transform: translate(0, 0) scale(0.5);
+  }
+
+  70% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* 4. Twinkle Animation (더 부드럽게) */
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* 5. Comet Group Container (Holds Head + Tail) */
+.comet-group {
+  position: absolute;
+  /* 그룹 자체는 위치만 잡고, 내부 요소들이 애니메이션됨 */
+  pointer-events: none;
+}
+
+/* 5.1 Glowing Head (선두) */
+.comet-head {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px 4px rgba(255, 255, 255, 1);
+  z-index: 2;
+
+  /* 애니메이션 적용 */
+  animation: meteorShoot var(--shoot-duration) linear infinite;
+  animation-delay: var(--shoot-delay);
+}
+
+/* 5.2 Living Particle (꼬리) */
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  z-index: 1;
+
+  /* Head와 같은 궤적을 그리지만 딜레이를 줌 */
+  animation:
+    meteorShoot var(--shoot-duration) linear infinite,
+    particleLife var(--shoot-duration) linear infinite;
+
+  /* 
+       딜레이 계산:
+       기본 딜레이(--shoot-delay) + 순서에 따른 지연(인덱스 * 0.005s)
+       너무 길면 뱀처럼 되므로 아주 짧게
+    */
+  animation-delay:
+    calc(var(--shoot-delay) + (var(--i) * 0.015s)),
+    calc(var(--shoot-delay) + (var(--i) * 0.015s));
+
+  /* 랜덤 위치 오차 (먼지 효과) */
+  transform-origin: center;
+  /* translate()는 meteorShoot에서 덮어쓰므로 마진으로 미세 조정하거나 wrapper 사용 권장 */
+  /* 여기서는 간단히 box-shadow나 margin으로 오차 표현 어렵으므로 생략하고 scale로 조절 */
+}
+
+@keyframes meteorShoot {
+  0% {
+    transform: translate(20vw, -20vh) rotate(-45deg) translateX(0);
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-120vw, 120vh) rotate(-45deg) translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes particleLife {
+  0% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* 6. 기존 Comet 스타일 제거/대체됨 */
