@@ -107,88 +107,35 @@ body {
   }
 }
 
-/* 5. Comet Group Container (Holds Head + Tail) */
-.comet-group {
+/* 5. Comet Animation */
+.comet {
   position: absolute;
-  /* 그룹 자체는 위치만 잡고, 내부 요소들이 애니메이션됨 */
-  pointer-events: none;
-}
-
-/* 5.1 Glowing Head (선두) */
-.comet-head {
-  position: absolute;
-  width: 4px;
-  height: 4px;
+  top: 20%;
+  right: 0;
+  width: 6px;
+  height: 6px;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 0 15px 4px rgba(255, 255, 255, 1);
-  z-index: 2;
-
-  /* 애니메이션 적용 */
-  animation: meteorShoot var(--shoot-duration) linear infinite;
-  animation-delay: var(--shoot-delay);
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+  transform-origin: center center;
+  animation: comet 8s linear infinite;
 }
 
-/* 5.2 Living Particle (꼬리) */
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  z-index: 1;
+@keyframes comet {
 
-  /* Head와 같은 궤적을 그리지만 딜레이를 줌 */
-  animation:
-    meteorShoot var(--shoot-duration) linear infinite,
-    particleLife var(--shoot-duration) linear infinite;
-
-  /* 
-       딜레이 계산:
-       기본 딜레이(--shoot-delay) + 순서에 따른 지연(인덱스 * 0.005s)
-       너무 길면 뱀처럼 되므로 아주 짧게
-    */
-  animation-delay:
-    calc(var(--shoot-delay) + (var(--i) * 0.015s)),
-    calc(var(--shoot-delay) + (var(--i) * 0.015s));
-
-  /* 랜덤 위치 오차 (먼지 효과) */
-  transform-origin: center;
-  /* translate()는 meteorShoot에서 덮어쓰므로 마진으로 미세 조정하거나 wrapper 사용 권장 */
-  /* 여기서는 간단히 box-shadow나 margin으로 오차 표현 어렵으므로 생략하고 scale로 조절 */
-}
-
-@keyframes meteorShoot {
-  0% {
-    transform: translate(20vw, -20vh) rotate(-45deg) translateX(0);
-    opacity: 1;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translate(-120vw, 120vh) rotate(-45deg) translateX(-100%);
+  0%,
+  40% {
+    transform: translateX(0);
     opacity: 0;
-  }
-}
-
-@keyframes particleLife {
-  0% {
-    opacity: 1;
-    transform: scale(1.5);
   }
 
   50% {
-    opacity: 0.5;
-    transform: scale(0.8);
+    opacity: 1;
   }
 
+  60%,
   100% {
+    transform: translateX(-100vmax);
     opacity: 0;
-    transform: scale(0);
   }
 }
-
-/* 6. 기존 Comet 스타일 제거/대체됨 */
