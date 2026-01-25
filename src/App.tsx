@@ -35,7 +35,7 @@ const Index: React.FC = () => {
                             cy="0"
                             rx="150"
                             ry="2"
-                        ></ellipse> 
+                        ></ellipse>
                     </g>
                     <g transform="rotate(300)">
                         <ellipse
@@ -73,11 +73,11 @@ const Index: React.FC = () => {
                             delay: 0.2,
                         }}
                     >
-                        <motion.text
+                        <motion.h1
                             className="bg-clip-text text-transparent bg-gradient-to-tr from-indigo-500 via-purple-400 to-pink-400 bg-repeat drop-shadow-lg shadow-white"
                         >
                             LSHworkspace
-                        </motion.text>
+                        </motion.h1>
                     </motion.div>
                     <motion.div
                         className="text-center py-1 md:py-3 "
@@ -90,18 +90,18 @@ const Index: React.FC = () => {
                             delay: 0.6
                         }}
                     >
-                        <text
+                        <h2
                             // className="bg-clip-text text-transparent bg-gradient-to-tr from-indigo-500 via-purple-400 to-pink-400"
                             className="text-2xl md:text-3xl lg:text-4xl font-bold drop-shadow-lg shadow-white"
                         >
                             지금은 점검중입니다.
-                        </text>
+                        </h2>
                     </motion.div>
                 </motion.div>
                 <motion.div
                     className="absolute w-full bottom-2 py-3 text-center text-zinc-200 text-xs md:text-base"
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1}}
+                    animate={{ opacity: 1 }}
                     transition={{
                         type: "spring",
                         stiffness: 200,
@@ -109,9 +109,9 @@ const Index: React.FC = () => {
                         delay: 0.6
                     }}
                 >
-                    <text className="drop-shadow-lg shadow-white">
-                        Official Contact: contact@lshworkspace.com<br/>ⓒ 2022 LSHworkspace. All rights reserved.
-                    </text>
+                    <p className="drop-shadow-lg shadow-white">
+                        Official Contact: contact@lshworkspace.com<br />ⓒ 2022 LSHworkspace. All rights reserved.
+                    </p>
                 </motion.div>
             </div>
         </div>
