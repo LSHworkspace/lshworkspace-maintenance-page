@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;700;900&display=swap');
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #050505;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* 1. Deep Black Void Background */
+.sky {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #050505;
+  overflow: hidden;
+  perspective: 1000px;
+  animation: skyZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes skyZoom {
+  0% {
+    transform: scale(1.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 2. Twinkling Stars */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation:
+    appear 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    twinkle ease-in-out infinite;
+  animation-delay:
+    var(--appear-delay),
+    calc(var(--appear-delay) + 3.5s + var(--twinkle-delay));
+  animation-duration:
+    3.5s,
+    var(--twinkle-duration);
+}
+
+/* Small stars */
+.star-small {
+  width: 0.5px;
+  height: 0.5px;
+  box-shadow: 0 0 1.5px rgba(255, 255, 255, 0.6);
+}
+
+/* Medium stars */
+.star-medium {
+  width: 1px;
+  height: 1px;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+}
+
+/* Large stars */
+.star-large {
+  width: 1.5px;
+  height: 1.5px;
+  box-shadow: 0 0 4.5px rgba(255, 255, 255, 0.8);
+}
+
+/* 3. Appear Animation (우주 워프 효과) */
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: translate(var(--start-x), var(--start-y)) scale(0.1);
+  }
+
+  40% {
+    opacity: 0.2;
+    transform: translate(0, 0) scale(0.5);
+  }
+
+  70% {
+    opacity: 0.6;
+    transform: translate(0, 0) scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* 4. Twinkle Animation */
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}

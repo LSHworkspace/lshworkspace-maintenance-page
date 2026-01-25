@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: rgb(0, 0, 0);
+  font-family: "Pretendard", ui-sans-serif, system-ui, sans-serif !important;
+}
