@@ -1,19 +1,17 @@
-name: Deploy to GitHub Pages and Server
+name: Cloudflare Pages CI/CD
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    branches:
+      - main        # Production
+      - development # Staging
+  pull_request:     # Feature Previews
 
 jobs:
-  build-and-deploy:
+  quality-check:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -25,61 +23,58 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build project
+      - name: Lint Check
+        run: npm run lint
+
+      - name: Type Check
+        run: npx tsc --noEmit
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test
+
+  deploy:
+    needs: [quality-check, test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
         run: npm run build
 
-      - name: Prepare files for server deployment
-        run: |
-          # maintenance 페이지를 index.html 복사본으로 만들고 아카이브 생성
-          cp dist/index.html dist/maintenance.html
-          tar -czf dist.tar.gz -C dist .
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
-          commit_message: "🔄 Deploy to GitHub Pages"
-
-      - name: Upload archive to server
-        uses: appleboy/scp-action@v0.1.10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist.tar.gz"
-          target: "/tmp/dist.tar.gz"
-          # strip_components: 0 옵션은 필요시에 상위 디렉터리 레벨 유지를 위해 사용
-
-      - name: Deploy to server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            set -euo pipefail
-
-            # 혹시 /tmp/dist.tar.gz 가 디렉터리로 남아 있으면 제거
-            rm -rf /tmp/dist.tar.gz
-
-            # 1) maintenance 디렉터리로 이동 (절대경로는 이 한 번만)
-            cd /srv/lshworkspace/nginx/share/maintenance
-
-            # 2) 상대경로 변수 선언
-            RELEASES_DIR="releases"
-            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-            NEW_RELEASE="$RELEASES_DIR/$TIMESTAMP"
-
-            # 3) 새 릴리즈 디렉터리 생성 및 압축 해제
-            mkdir -p "$NEW_RELEASE"
-            tar -xzf /tmp/dist.tar.gz -C "$NEW_RELEASE"
-            rm -f /tmp/dist.tar.gz
-
-            # 4) current 심볼릭 링크를 상대경로로 원자적 업데이트
-            ln -sfn "$NEW_RELEASE" current
-
-            # 5) 완료 로그
-            echo "✅ New release created at: $NEW_RELEASE"
-            echo "ℹ️ 'current' → $NEW_RELEASE"
+          apiToken: ${{ secrets.CLOUDFLARE_PAGES_EDIT }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }} # main -> Prod, others -> Preview
