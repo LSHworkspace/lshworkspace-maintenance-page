@@ -13,6 +13,7 @@ precision highp float;
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_pointer;
+uniform float u_rain;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -39,6 +40,17 @@ float fbm(vec2 p) {
     amplitude *= 0.48;
   }
   return value;
+}
+
+float rainLayer(vec2 uv, float columns, float speed, float seed) {
+  uv.x += uv.y * 0.085;
+  float column = floor(uv.x * columns);
+  float phase = hash(vec2(column, seed));
+  float localX = abs(fract(uv.x * columns) - 0.5);
+  float localY = fract(uv.y * 1.85 + u_time * speed + phase);
+  float line = 1.0 - smoothstep(0.012, 0.07, localX);
+  float streakLength = 1.0 - smoothstep(0.04, 0.34, abs(localY - 0.5));
+  return line * streakLength * step(0.52, phase);
 }
 
 void main() {
@@ -75,6 +87,10 @@ void main() {
   color += vec3(0.14, 0.17, 0.23) * sheen * 0.36;
   color += graphite * ribbon * 0.52;
   color += steel * ribbonCore * 0.12;
+
+  float rain = rainLayer(uv, 74.0, 1.35, 3.0);
+  rain += rainLayer(uv + vec2(0.17, 0.0), 43.0, 0.82, 11.0) * 0.55;
+  color += vec3(0.22, 0.25, 0.31) * rain * u_rain * 0.24;
   float pointerLight = exp(-5.5 * length(p - pointer));
   color += vec3(0.08, 0.10, 0.14) * pointerLight * 0.06;
 
@@ -136,6 +152,7 @@ export function ShaderBackdrop() {
     const resolution = gl.getUniformLocation(program, 'u_resolution')
     const time = gl.getUniformLocation(program, 'u_time')
     const pointer = gl.getUniformLocation(program, 'u_pointer')
+    const rain = gl.getUniformLocation(program, 'u_rain')
     gl.enableVertexAttribArray(position)
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
 
@@ -166,7 +183,9 @@ export function ShaderBackdrop() {
       if (now - previous >= 33 || reducedMotion) {
         resize()
         gl.uniform2f(resolution, canvas.width, canvas.height)
-        gl.uniform1f(time, reducedMotion ? 0 : (now - start) / 1000)
+        const elapsed = (now - start) / 1000
+        gl.uniform1f(time, reducedMotion ? 0 : elapsed)
+        gl.uniform1f(rain, !reducedMotion && elapsed < 3.25 ? 1 : 0)
         pointerCurrent.x += (pointerTarget.x - pointerCurrent.x) * 0.035
         pointerCurrent.y += (pointerTarget.y - pointerCurrent.y) * 0.035
         gl.uniform2f(pointer, pointerCurrent.x, pointerCurrent.y)
