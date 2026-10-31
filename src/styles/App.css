@@ -67,13 +67,15 @@ body {
 
 .signature-mark {
   position: absolute;
-  top: -0.35rem;
-  right: 0;
-  width: 2.4rem;
-  height: 2.4rem;
-  border: 1px solid rgba(216, 216, 220, 0.18);
+  z-index: 1;
+  top: 50%;
+  right: clamp(-18rem, -16vw, -9rem);
+  width: min(42vw, 32rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(216, 216, 220, 0.1);
   border-radius: 50%;
   opacity: 0;
+  transform: translateY(-50%);
   animation: signatureReveal 1.2s 920ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -85,8 +87,8 @@ body {
   background: conic-gradient(
     from 10deg,
     transparent 0 48%,
-    rgba(226, 226, 230, 0.78) 57%,
-    rgba(226, 226, 230, 0.08) 66%,
+    rgba(226, 226, 230, 0.42) 57%,
+    rgba(226, 226, 230, 0.04) 66%,
     transparent 74% 100%
   );
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1px), #000 0);
@@ -189,8 +191,8 @@ body {
 }
 
 @keyframes signatureReveal {
-  from { opacity: 0; filter: blur(5px); transform: scale(0.82); }
-  to { opacity: 1; filter: blur(0); transform: scale(1); }
+  from { opacity: 0; filter: blur(9px); transform: translateY(-50%) scale(0.92); }
+  to { opacity: 0.72; filter: blur(0); transform: translateY(-50%) scale(1); }
 }
 
 @keyframes signatureOrbit {
@@ -271,7 +273,7 @@ body {
   .service-name { margin-bottom: 1.5rem; }
   .message h1 { font-size: clamp(2.45rem, 11.5vw, 3.75rem); }
   .description { margin-top: 1.75rem; font-size: 0.82rem; }
-  .signature-mark { top: -0.1rem; width: 2rem; height: 2rem; }
+  .signature-mark { right: -9rem; width: 18rem; }
   .legal { right: 1.5rem; bottom: 1.5rem; left: 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
   .legal small { font-size: 0.58rem; }
   .legal a { font-size: 0.64rem; }
@@ -281,7 +283,8 @@ body {
   .shader { opacity: 0.8; }
   .maintenance::before { display: none; animation: none; }
   .signature-mark,
-  .signature-mark::before { animation: none; opacity: 1; }
+  .signature-mark::before { animation: none; }
+  .signature-mark { opacity: 0.72; }
   .service-name,
   .message h1 span,
   .description,

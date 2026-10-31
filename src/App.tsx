@@ -31,12 +31,12 @@ const App: React.FC = () => {
   return (
     <main className="maintenance" aria-labelledby="maintenance-title">
       <ShaderBackdrop />
+      <span className="signature-mark" aria-hidden="true" />
 
       <section className="message">
-        <span className="signature-mark" aria-hidden="true" />
         <p className="service-name">LSHworkspace · System maintenance</p>
         <h1 id="maintenance-title">
-          <span>더 나은 경험을 위해</span>
+          <span>더 깊은 경험을 위해</span>
           <span>잠시 멈춥니다.</span>
         </h1>
         <p className="description">
