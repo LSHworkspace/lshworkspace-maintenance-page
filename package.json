@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && tsx --no-warnings scripts/generate-html.ts",
+    "build": "tsc && vite build && tsx --no-warnings scripts/generate-html.ts && tsx scripts/validate-inline-html.ts",
     "serve": "vite preview",
     "test": "echo \"No tests specified\" && exit 0",
     "lint": "eslint ."
