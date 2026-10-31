@@ -32,6 +32,7 @@ const App: React.FC = () => {
       <ShaderBackdrop />
 
       <section className="message">
+        <span className="signature-mark" aria-hidden="true" />
         <p className="service-name">LSHworkspace · System maintenance</p>
         <h1 id="maintenance-title">
           <span>더 나은 경험을 위해</span>
