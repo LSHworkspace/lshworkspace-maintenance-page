@@ -67,19 +67,13 @@ body {
 
 .message h1 {
   margin: 0;
-  color: transparent;
-  background: linear-gradient(112deg, #929298 0%, #f7f7f8 32%, #b8b8be 50%, #f4f4f6 70%, #8e8e95 100%);
-  background-size: 180% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
+  color: var(--white);
   font-size: clamp(2.5rem, 4.8vw, 4.6rem);
   font-weight: 700;
   letter-spacing: -0.062em;
   line-height: 1.14;
   text-wrap: balance;
-  animation:
-    settle 1.25s 160ms cubic-bezier(0.22, 1, 0.36, 1) both,
-    titleSheen 12s 1.4s ease-in-out infinite alternate;
+  animation: settle 1.25s 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .description {
@@ -104,6 +98,8 @@ body {
   color: #5f5f65;
   font-size: 0.67rem;
   letter-spacing: -0.01em;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   animation: settle 1.2s 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -129,11 +125,6 @@ body {
     filter: blur(0);
     transform: translateY(0);
   }
-}
-
-@keyframes titleSheen {
-  0%, 20% { background-position: 0% 50%; }
-  80%, 100% { background-position: 100% 50%; }
 }
 
 @media (max-width: 640px) {

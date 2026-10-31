@@ -60,12 +60,19 @@ void main() {
   float edge = 1.0 - smoothstep(0.0, 0.012, abs(field - 0.555));
   float sheen = pow(max(0.0, 1.0 - abs(field - 0.64) * 4.2), 7.0);
 
+  float curve = p.y - 0.12 * sin(p.x * 1.85 + t * 1.4) + 0.06;
+  float ribbon = exp(-15.0 * abs(curve));
+  ribbon *= 1.0 - smoothstep(0.22, 1.05, abs(p.x));
+  float ribbonCore = exp(-55.0 * abs(curve + 0.018));
+
   vec3 base = vec3(0.004, 0.005, 0.007);
   vec3 graphite = vec3(0.055, 0.065, 0.082);
   vec3 steel = vec3(0.30, 0.34, 0.42);
-  vec3 color = mix(base, graphite, contour * 0.72);
-  color += steel * edge * 0.16;
-  color += vec3(0.14, 0.17, 0.23) * sheen * 0.22;
+  vec3 color = mix(base, graphite, contour * 0.92);
+  color += steel * edge * 0.28;
+  color += vec3(0.14, 0.17, 0.23) * sheen * 0.36;
+  color += graphite * ribbon * 0.52;
+  color += steel * ribbonCore * 0.12;
   float pointerLight = exp(-5.5 * length(p - pointer));
   color += vec3(0.08, 0.10, 0.14) * pointerLight * 0.06;
 

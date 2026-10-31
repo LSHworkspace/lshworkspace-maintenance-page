@@ -3,8 +3,28 @@ import { ShaderBackdrop } from './components/ShaderBackdrop'
 
 const App: React.FC = () => {
   useEffect(() => {
-    const retry = window.setTimeout(() => window.location.reload(), 30_000)
-    return () => window.clearTimeout(retry)
+    if (import.meta.env.DEV) return
+
+    let checking = false
+    const checkRecovery = async () => {
+      if (checking || document.visibilityState !== 'visible') return
+      checking = true
+      try {
+        const response = await fetch(window.location.href, {
+          method: 'HEAD',
+          cache: 'no-store',
+        })
+        const isFallback = response.headers.has('X-LSHworkspace-Fallback')
+        if (response.ok && !isFallback) window.location.reload()
+      } catch {
+        // The maintenance page remains stable while the origin is unavailable.
+      } finally {
+        checking = false
+      }
+    }
+
+    const retry = window.setInterval(checkRecovery, 30_000)
+    return () => window.clearInterval(retry)
   }, [])
 
   return (
