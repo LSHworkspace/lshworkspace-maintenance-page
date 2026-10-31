@@ -49,18 +49,20 @@ void main() {
   pointer.x *= u_resolution.x / u_resolution.y;
   p += pointer * 0.022;
 
-  float t = u_time * 0.055;
+  float slowTime = u_time * 0.024;
+  float flowTime = u_time * 0.061;
+  float surfaceTime = u_time * 0.038;
   vec2 flow = vec2(
-    fbm(p * 1.15 + vec2(t, -t * 0.45)),
-    fbm(p * 1.10 + vec2(-t * 0.38, t * 0.72))
+    fbm(p * 1.15 + vec2(flowTime, -slowTime * 0.72)),
+    fbm(p * 1.10 + vec2(-slowTime * 0.62, flowTime * 0.54))
   );
 
-  float field = fbm(p * 1.45 + flow * 0.75 + vec2(t * 0.22, 0.0));
+  float field = fbm(p * 1.45 + flow * 0.75 + vec2(surfaceTime * 0.35, -slowTime * 0.2));
   float contour = smoothstep(0.42, 0.68, field);
   float edge = 1.0 - smoothstep(0.0, 0.012, abs(field - 0.555));
   float sheen = pow(max(0.0, 1.0 - abs(field - 0.64) * 4.2), 7.0);
 
-  float curve = p.y - 0.12 * sin(p.x * 1.85 + t * 1.4) + 0.06;
+  float curve = p.y - 0.12 * sin(p.x * 1.85 + surfaceTime * 1.25) + 0.06;
   float ribbon = exp(-15.0 * abs(curve));
   ribbon *= 1.0 - smoothstep(0.22, 1.05, abs(p.x));
   float ribbonCore = exp(-55.0 * abs(curve + 0.018));

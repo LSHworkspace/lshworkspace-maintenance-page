@@ -62,7 +62,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  animation: labelReveal 1.05s 60ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: labelReveal 720ms 70ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .message h1 {
@@ -81,11 +81,11 @@ body {
 }
 
 .message h1 span:first-child {
-  animation: titleFirst 1.3s 130ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: titleFirst 1.65s 120ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .message h1 span:last-child {
-  animation: titleSecond 1.4s 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: titleSecond 1.08s 340ms cubic-bezier(0.12, 0.82, 0.24, 1) both;
 }
 
 .description {
@@ -95,7 +95,7 @@ body {
   font-weight: 430;
   letter-spacing: -0.018em;
   line-height: 1.75;
-  animation: copyReveal 1.15s 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: copyReveal 860ms 690ms cubic-bezier(0.2, 0.74, 0.22, 1) both;
 }
 
 .legal {
@@ -116,14 +116,14 @@ body {
 
 .legal small {
   font: inherit;
-  animation: legalFromLeft 1s 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: legalFromLeft 680ms 940ms cubic-bezier(0.24, 0.7, 0.2, 1) both;
 }
 
 .legal a {
   color: #8e8e93;
   text-decoration: none;
   transition: color 160ms ease;
-  animation: legalFromRight 1s 580ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: legalFromRight 1.18s 790ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .legal a:hover { color: var(--white); }
