@@ -12,6 +12,7 @@ precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
+uniform vec2 u_pointer;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -44,6 +45,9 @@ void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution.xy;
   vec2 p = uv - 0.5;
   p.x *= u_resolution.x / u_resolution.y;
+  vec2 pointer = u_pointer - 0.5;
+  pointer.x *= u_resolution.x / u_resolution.y;
+  p += pointer * 0.022;
 
   float t = u_time * 0.055;
   vec2 flow = vec2(
@@ -62,6 +66,8 @@ void main() {
   vec3 color = mix(base, graphite, contour * 0.72);
   color += steel * edge * 0.16;
   color += vec3(0.14, 0.17, 0.23) * sheen * 0.22;
+  float pointerLight = exp(-5.5 * length(p - pointer));
+  color += vec3(0.08, 0.10, 0.14) * pointerLight * 0.06;
 
   float centerClear = 1.0 - smoothstep(0.12, 0.62, length(p * vec2(0.82, 1.15)));
   color *= mix(1.0, 0.34, centerClear);
@@ -120,6 +126,7 @@ export function ShaderBackdrop() {
     const position = gl.getAttribLocation(program, 'a_position')
     const resolution = gl.getUniformLocation(program, 'u_resolution')
     const time = gl.getUniformLocation(program, 'u_time')
+    const pointer = gl.getUniformLocation(program, 'u_pointer')
     gl.enableVertexAttribArray(position)
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
 
@@ -127,6 +134,13 @@ export function ShaderBackdrop() {
     let frame = 0
     let previous = 0
     const start = performance.now()
+    const pointerTarget = { x: 0.5, y: 0.5 }
+    const pointerCurrent = { x: 0.5, y: 0.5 }
+
+    const updatePointer = (event: PointerEvent) => {
+      pointerTarget.x = event.clientX / window.innerWidth
+      pointerTarget.y = 1 - event.clientY / window.innerHeight
+    }
 
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5)
@@ -144,6 +158,9 @@ export function ShaderBackdrop() {
         resize()
         gl.uniform2f(resolution, canvas.width, canvas.height)
         gl.uniform1f(time, reducedMotion ? 0 : (now - start) / 1000)
+        pointerCurrent.x += (pointerTarget.x - pointerCurrent.x) * 0.035
+        pointerCurrent.y += (pointerTarget.y - pointerCurrent.y) * 0.035
+        gl.uniform2f(pointer, pointerCurrent.x, pointerCurrent.y)
         gl.drawArrays(gl.TRIANGLES, 0, 6)
         previous = now
       }
@@ -152,10 +169,12 @@ export function ShaderBackdrop() {
 
     render(performance.now())
     window.addEventListener('resize', resize)
+    if (!reducedMotion) window.addEventListener('pointermove', updatePointer, { passive: true })
 
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('resize', resize)
+      window.removeEventListener('pointermove', updatePointer)
       gl.deleteBuffer(buffer)
       gl.deleteProgram(program)
       gl.deleteShader(vertex)
