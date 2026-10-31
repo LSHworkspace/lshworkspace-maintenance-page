@@ -171,6 +171,9 @@ body {
 }
 
 .legal a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: #8e8e93;
   text-decoration: none;
   transition: color 160ms ease;

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Mail } from 'lucide-react'
 import { ShaderBackdrop } from './components/ShaderBackdrop'
 
 const App: React.FC = () => {
@@ -45,7 +46,10 @@ const App: React.FC = () => {
       </section>
 
       <footer className="legal">
-        <a href="mailto:contact@lshworkspace.com">contact@lshworkspace.com</a>
+        <a href="mailto:contact@lshworkspace.com">
+          <Mail size={13} strokeWidth={1.6} aria-hidden="true" />
+          contact@lshworkspace.com
+        </a>
         <small>© 2022–2026 LSHworkspace. All rights reserved.</small>
       </footer>
     </main>
