@@ -149,7 +149,7 @@ body {
   color: #5f5f65;
   font-size: 0.67rem;
   letter-spacing: -0.01em;
-  padding-top: 1.25rem;
+  padding-top: 0.9rem;
 }
 
 .legal::before {
@@ -167,14 +167,14 @@ body {
 
 .legal small {
   font: inherit;
-  animation: legalFromLeft 680ms 2.62s cubic-bezier(0.24, 0.7, 0.2, 1) both;
+  animation: legalFromRight 680ms 2.62s cubic-bezier(0.24, 0.7, 0.2, 1) both;
 }
 
 .legal a {
   color: #8e8e93;
   text-decoration: none;
   transition: color 160ms ease;
-  animation: legalFromRight 1.18s 2.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: legalFromLeft 1.18s 2.38s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .legal a:hover { color: var(--white); }
@@ -269,7 +269,7 @@ body {
   .message h1 { font-size: clamp(2.45rem, 11.5vw, 3.75rem); }
   .description { margin-top: 1.75rem; font-size: 0.82rem; }
   .signature-mark { top: -0.1rem; width: 2rem; height: 2rem; }
-  .legal { right: 1.5rem; bottom: 1.5rem; left: 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.55rem; }
+  .legal { right: 1.5rem; bottom: 1.5rem; left: 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.35rem; }
   .legal small { font-size: 0.58rem; }
   .legal a { font-size: 0.64rem; }
 }

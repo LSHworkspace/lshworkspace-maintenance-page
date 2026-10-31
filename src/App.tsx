@@ -45,8 +45,8 @@ const App: React.FC = () => {
       </section>
 
       <footer className="legal">
-        <small>© 2022–2026 LSHworkspace. All rights reserved.</small>
         <a href="mailto:contact@lshworkspace.com">contact@lshworkspace.com</a>
+        <small>© 2022–2026 LSHworkspace. All rights reserved.</small>
       </footer>
     </main>
   )
