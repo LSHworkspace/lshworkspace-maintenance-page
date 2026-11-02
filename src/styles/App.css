@@ -167,10 +167,7 @@ body {
   animation: drawLine 1.4s 1.75s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.legal small {
-  font: inherit;
-  animation: legalFromRight 680ms 2.62s cubic-bezier(0.24, 0.7, 0.2, 1) both;
-}
+.legal small { font: inherit; }
 
 .legal a {
   display: inline-flex;
@@ -179,7 +176,11 @@ body {
   color: #8e8e93;
   text-decoration: none;
   transition: color 160ms ease;
-  animation: legalFromLeft 1.18s 2.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.legal small,
+.legal a {
+  animation: legalFade 1.8s 2.45s cubic-bezier(0.2, 0.65, 0.25, 1) both;
 }
 
 .legal a:hover { color: var(--white); }
@@ -258,14 +259,9 @@ body {
   }
 }
 
-@keyframes legalFromLeft {
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes legalFromRight {
-  from { opacity: 0; transform: translateX(10px); }
-  to { opacity: 1; transform: translateX(0); }
+@keyframes legalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 640px) {
